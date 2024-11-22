@@ -1,0 +1,11 @@
+[package]
+name = "hhrr_management"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4"
+cqrs_domain = { path = "../cqrs_domain" }
+cqrs_derive_macro = { path = "../cqrs_derive_macro" }
+diesel = { version = "2.2.2", features = ["postgres", "r2d2", "serde_json"] }
+env_logger = "0.11.5"

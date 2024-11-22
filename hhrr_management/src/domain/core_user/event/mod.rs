@@ -1,0 +1,1 @@
+pub mod core_user_created_event;

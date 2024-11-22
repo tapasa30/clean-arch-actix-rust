@@ -1,0 +1,1 @@
+pub mod core_user_repository_trait;
