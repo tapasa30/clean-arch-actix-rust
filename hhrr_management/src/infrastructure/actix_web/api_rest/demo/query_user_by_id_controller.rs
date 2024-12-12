@@ -1,11 +1,14 @@
+use std::rc::Rc;
 use actix_web::{HttpResponse, Responder, web};
+use uuid::Uuid;
 use crate::application::demo::query::find_user_by_id::find_user_by_id_query::FindUserByIdQuery;
 use crate::application::demo::query::find_user_by_id::find_user_by_id_query_response::FindUserByIdQueryResponse;
 use crate::core::bus::query_bus::QueryBus;
 
-pub async fn query_user_by_id_action(request_body: String, query_bus: web::Data<QueryBus>) -> impl Responder {
+pub async fn query_user_by_id_action(path: web::Path<String>, query_bus: web::Data<Rc<QueryBus>>) -> impl Responder {
+    let user_id = path.into_inner();
     let find_user_by_id_query = &FindUserByIdQuery {
-        user_id: String::from("1")
+        user_id: Uuid::parse_str(&user_id).unwrap()
     };
 
     let find_user_by_id_response = query_bus.dispatch_query(find_user_by_id_query).unwrap();
