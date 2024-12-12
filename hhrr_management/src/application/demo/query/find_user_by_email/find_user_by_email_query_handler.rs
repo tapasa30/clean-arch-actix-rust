@@ -9,7 +9,7 @@ pub struct FindUserByEmailQueryHandler {}
 
 impl QueryHandler<FindUserByEmailQuery, FindUserByEmailQueryResponse> for FindUserByEmailQueryHandler {
     fn handle(&self, query: &FindUserByEmailQuery) -> Result<Box<FindUserByEmailQueryResponse>, Box<dyn Error>> {
-        println!("Searching user by email: {}", query.get_user_email());
+        println!("Searching user by email: {}", query.user_email);
 
         Ok(Box::new(FindUserByEmailQueryResponse { user_name: "asd".to_string() }))
     }
