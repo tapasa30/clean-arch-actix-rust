@@ -18,7 +18,7 @@ pub trait CommandHandler<CommandImp: Command> {
     }
 }
 
-pub trait CommandHandlerBase: Send {
+pub trait CommandHandlerBase {
     fn handle_command(&self, command: &dyn Command);
 
     fn get_name(&self) -> &'static str;
