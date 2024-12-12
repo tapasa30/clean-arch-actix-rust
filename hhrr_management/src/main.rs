@@ -1,5 +1,7 @@
-use std::sync::{Arc, Mutex};
+use std::env;
+use std::rc::Rc;
 use actix_web::{web, App, HttpServer, middleware};
+use diesel::{PgConnection, r2d2};
 use infrastructure::actix_web::api_rest::demo::demo_service_config;
 use crate::core::bus::command_bus::CommandBus;
 use crate::core::bus::query_bus::QueryBus;
@@ -13,24 +15,27 @@ mod domain;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "debug");
+    dotenvy::dotenv().ok();
     env_logger::init();
 
-
-    let service_container_reference = Arc::new(ServiceContainer::new());
-    let command_bus_reference = Arc::new(CommandBus::new());
-    let query_bus_reference = Arc::new(QueryBus::new(RepositoryContainer::new()));
+    let connection_manager = r2d2::ConnectionManager::<PgConnection>::new(env::var("DATABASE_URL").unwrap());
+    let database_pool = r2d2::Pool::builder()
+        .build(connection_manager)
+        .expect("database URL should be valid path to SQLite DB file");
 
     HttpServer::new(move || {
+        let repository_container_reference = Rc::new(RepositoryContainer::new(database_pool.clone()));
+        let service_container_reference = Rc::new(ServiceContainer::new());
+
+        let command_bus_reference = Rc::new(CommandBus::new(repository_container_reference.clone()));
+        let query_bus_reference = Rc::new(QueryBus::new(repository_container_reference.clone()));
+
         App::new()
             .wrap(middleware::Logger::default())
-            .service(
-                web::scope("/demo")
-                    .configure(demo_service_config)
-            )
-            .app_data(web::Data::from(service_container_reference.clone()))
-            .app_data(web::Data::from(command_bus_reference.clone()))
-            .app_data(web::Data::from(query_bus_reference.clone()))
+            .app_data(web::Data::new(service_container_reference))
+            .app_data(web::Data::new(command_bus_reference))
+            .app_data(web::Data::new(query_bus_reference))
+            .service(web::scope("/demo").configure(demo_service_config))
         
     })
         .bind(("127.0.0.1", 8081))?

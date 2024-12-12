@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::error::Error;
-use std::sync::{Arc, Mutex};
+use std::rc::Rc;
 use cqrs_domain::query::Query;
 use cqrs_domain::query_handler::QueryHandlerBase;
 use cqrs_domain::query_response::QueryResponse;
@@ -9,13 +9,13 @@ use crate::application::demo::query::find_user_by_id::find_user_by_id_query_hand
 use crate::core::container::repository_container::RepositoryContainer;
 
 pub struct QueryBus {
-    query_handlers: Mutex<HashMap<String, Box<dyn QueryHandlerBase>>>
+    query_handlers: HashMap<String, Box<dyn QueryHandlerBase>>
 }
 
 impl QueryBus {
-    pub fn new(repository_container: RepositoryContainer) -> Self {
+    pub fn new(repository_container: Rc<RepositoryContainer>) -> Self {
         let find_user_by_id_query_handler = FindUserByIdQueryHandler::new(
-            repository_container.demo_repository
+            repository_container.demo_repository.clone()
         );
         
         let find_user_by_email_query_handler = FindUserByEmailQueryHandler {};
@@ -33,22 +33,17 @@ impl QueryBus {
         );
 
         return QueryBus {
-            query_handlers: Mutex::new(query_handlers)
+            query_handlers
         }
     }
 
     pub fn dispatch_query(&self, query: &dyn Query) -> Result<Box<dyn QueryResponse>, Box<dyn Error>> {
-        let query_handlers = self.query_handlers.lock().unwrap();
-        let query_handler = query_handlers.get(query.get_name());
+        let query_handler = self.query_handlers.get(query.get_name());
 
         if !query_handler.is_some() {
             panic!("QueryHandler not found");
         }
 
-        let response = query_handler.unwrap().handle_query(query);
-
-        drop(query_handlers);
-
-        return response;
+        return query_handler.unwrap().handle_query(query);
     }
 }
