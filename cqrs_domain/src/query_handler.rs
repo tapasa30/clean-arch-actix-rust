@@ -22,7 +22,7 @@ pub trait QueryHandler<QueryImp: Query, QueryResponseImp: QueryResponse + 'stati
     }
 }
 
-pub trait QueryHandlerBase {
+pub trait QueryHandlerBase: Send + Sync {
     fn handle_query(&self, query: &dyn Query) -> Result<Box<dyn QueryResponse>, Box<dyn Error>>;
 
     fn get_name(&self) -> &'static str;

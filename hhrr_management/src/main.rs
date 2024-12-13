@@ -1,5 +1,5 @@
 use std::env;
-use std::rc::Rc;
+use std::sync::Arc;
 use actix_web::{web, App, HttpServer, middleware};
 use diesel::{PgConnection, r2d2};
 use infrastructure::actix_web::api_rest::demo::demo_service_config;
@@ -23,22 +23,23 @@ async fn main() -> std::io::Result<()> {
         .build(connection_manager)
         .expect("database URL should be valid path to SQLite DB file");
 
-    HttpServer::new(move || {
-        let repository_container_reference = Rc::new(RepositoryContainer::new(database_pool.clone()));
-        let service_container_reference = Rc::new(ServiceContainer::new());
+    let repository_container_reference = Arc::new(RepositoryContainer::new(database_pool.clone()));
+    let service_container_reference = Arc::new(ServiceContainer::new());
 
-        let command_bus_reference = Rc::new(CommandBus::new(repository_container_reference.clone()));
-        let query_bus_reference = Rc::new(QueryBus::new(repository_container_reference.clone()));
+    let command_bus_reference = Arc::new(CommandBus::new(repository_container_reference.clone()));
+    let query_bus_reference = Arc::new(QueryBus::new(repository_container_reference.clone()));
+
+    HttpServer::new(move || {
 
         App::new()
             .wrap(middleware::Logger::default())
-            .app_data(web::Data::new(service_container_reference))
-            .app_data(web::Data::new(command_bus_reference))
-            .app_data(web::Data::new(query_bus_reference))
+            .app_data(web::Data::new(service_container_reference.clone()))
+            .app_data(web::Data::new(command_bus_reference.clone()))
+            .app_data(web::Data::new(query_bus_reference.clone()))
             .service(web::scope("/demo").configure(demo_service_config))
         
     })
-        .bind(("127.0.0.1", 8081))?
+        .bind(("0.0.0.0", 8081))?
         .run()
         .await
 }

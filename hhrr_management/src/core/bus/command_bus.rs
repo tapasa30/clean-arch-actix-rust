@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::rc::Rc;
+use std::sync::Arc;
 use cqrs_domain::command::Command;
 use cqrs_domain::command_handler::CommandHandlerBase;
 use crate::application::demo::command::create_user::create_user_command_handler::CreateUserCommandHandler;
@@ -11,7 +11,7 @@ pub struct CommandBus {
 }
 
 impl CommandBus {
-    pub fn new(repository_container: Rc<RepositoryContainer>) -> Self {
+    pub fn new(repository_container: Arc<RepositoryContainer>) -> Self {
         let create_user_command_handler = CreateUserCommandHandler {};
         let delete_user_command_handler = DeleteUserCommandHandler {};
 

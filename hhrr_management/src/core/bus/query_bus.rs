@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::error::Error;
-use std::rc::Rc;
+use std::sync::Arc;
 use cqrs_domain::query::Query;
 use cqrs_domain::query_handler::QueryHandlerBase;
 use cqrs_domain::query_response::QueryResponse;
@@ -13,7 +13,7 @@ pub struct QueryBus {
 }
 
 impl QueryBus {
-    pub fn new(repository_container: Rc<RepositoryContainer>) -> Self {
+    pub fn new(repository_container: Arc<RepositoryContainer>) -> Self {
         let find_user_by_id_query_handler = FindUserByIdQueryHandler::new(
             repository_container.demo_repository.clone()
         );

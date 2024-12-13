@@ -1,11 +1,11 @@
-use std::rc::Rc;
+use std::sync::Arc;
 use diesel::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use crate::domain::demo::repository::demo_repository_trait::DemoRepositoryTrait;
 use crate::infrastructure::database::diesel::repository::demo::demo_repository::PostgreSqlDemoRepository;
 
 pub struct RepositoryContainer {
-    pub demo_repository: Rc<Box<dyn DemoRepositoryTrait>>
+    pub demo_repository: Arc<Box<dyn DemoRepositoryTrait>>
 }
 
 impl RepositoryContainer {
@@ -15,7 +15,7 @@ impl RepositoryContainer {
         );
 
         return Self {
-            demo_repository: Rc::new(Box::new(demo_repository))
+            demo_repository: Arc::new(Box::new(demo_repository))
         }
     }
 }
