@@ -30,12 +30,11 @@ async fn main() -> std::io::Result<()> {
     let query_bus_reference = Arc::new(QueryBus::new(repository_container_reference.clone()));
 
     HttpServer::new(move || {
-
         App::new()
             .wrap(middleware::Logger::default())
-            .app_data(web::Data::new(service_container_reference.clone()))
-            .app_data(web::Data::new(command_bus_reference.clone()))
-            .app_data(web::Data::new(query_bus_reference.clone()))
+            .app_data(web::Data::from(service_container_reference.clone()))
+            .app_data(web::Data::from(command_bus_reference.clone()))
+            .app_data(web::Data::from(query_bus_reference.clone()))
             .service(web::scope("/demo").configure(demo_service_config))
         
     })
