@@ -12,7 +12,10 @@ pub struct CommandBus {
 
 impl CommandBus {
     pub fn new(repository_container: Arc<RepositoryContainer>) -> Self {
-        let create_user_command_handler = CreateUserCommandHandler {};
+        let create_user_command_handler = CreateUserCommandHandler::new(
+            repository_container.demo_repository.clone()
+        );
+
         let delete_user_command_handler = DeleteUserCommandHandler {};
 
         let mut command_handlers: HashMap<String, Box<dyn CommandHandlerBase>> = HashMap::new();

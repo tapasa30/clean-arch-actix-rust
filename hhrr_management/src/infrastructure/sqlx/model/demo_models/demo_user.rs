@@ -2,10 +2,10 @@ use uuid::Uuid;
 use crate::domain::demo::model::demo_model::{DemoModel, DemoModelTrait};
 
 pub struct CreateDemoUser {
-    id: Uuid,
-    title: String,
-    body: String,
-    is_published: bool,
+    pub id: Uuid,
+    pub title: String,
+    pub body: String,
+    pub is_published: bool,
 }
 
 pub struct ViewDemoUser {
