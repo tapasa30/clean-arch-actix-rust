@@ -1,10 +1,6 @@
-use diesel::{Queryable, Selectable};
 use uuid::Uuid;
 use crate::domain::demo::model::demo_model::{DemoModel, DemoModelTrait};
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::infrastructure::database::diesel::schema::schema::demo_models)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct CreateDemoUser {
     id: Uuid,
     title: String,
@@ -12,9 +8,6 @@ pub struct CreateDemoUser {
     is_published: bool,
 }
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::infrastructure::database::diesel::schema::schema::demo_models)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct ViewDemoUser {
     pub id: Uuid,
     pub title: String,
