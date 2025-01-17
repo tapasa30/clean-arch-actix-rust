@@ -1,5 +1,5 @@
 [package]
-name = "cqrs_derive_macro"
+name = "cqrs_core_derive_macro"
 version = "0.1.0"
 edition = "2021"
 
@@ -10,4 +10,4 @@ proc-macro = true
 syn = "2.0"
 quote = "1.0"
 proc-macro2 = "1.0"
-cqrs_domain = { path = "../cqrs_domain" }
+cqrs_core = { path = "../cqrs_core" }

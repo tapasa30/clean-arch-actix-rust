@@ -6,9 +6,9 @@ pub fn implement_derive_command_handler_trait(derive_input: &DeriveInput) -> Tok
     let command_handler_struct_name = &derive_input.ident;
 
     let expanded = quote! {
-        impl cqrs_domain::command_handler::CommandHandlerBase for #command_handler_struct_name
+        impl cqrs_core::command_handler::CommandHandlerBase for #command_handler_struct_name
         {
-            fn handle_command(&self, command: &dyn cqrs_domain::command::Command) {
+            fn handle_command(&self, command: &dyn cqrs_core::command::Command) {
                 return self.handle_command_as_any(command);
             }
 

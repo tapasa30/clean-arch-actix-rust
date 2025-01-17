@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "cqrs_domain"
+name = "cqrs_core"
 version = "0.1.0"

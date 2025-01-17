@@ -6,7 +6,7 @@ pub fn implement_derive_query_response_trait(derive_input: &DeriveInput) -> Toke
     let query_response_struct_name = &derive_input.ident;
 
     let expanded = quote! {
-        impl cqrs_domain::query_response::QueryResponse for #query_response_struct_name
+        impl cqrs_core::query_response::QueryResponse for #query_response_struct_name
         {
             fn as_any(&self) -> &dyn std::any::Any {
                 return self
