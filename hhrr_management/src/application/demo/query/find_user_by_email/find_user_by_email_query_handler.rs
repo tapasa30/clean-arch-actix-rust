@@ -1,6 +1,6 @@
 use std::error::Error;
-use cqrs_derive_macro::QueryHandler;
-use cqrs_domain::query_handler::QueryHandler;
+use cqrs_core_derive_macro::QueryHandler;
+use cqrs_core::query_handler::QueryHandler;
 use crate::application::demo::query::find_user_by_email::find_user_by_email_query::FindUserByEmailQuery;
 use crate::application::demo::query::find_user_by_email::find_user_by_email_query_response::FindUserByEmailQueryResponse;
 

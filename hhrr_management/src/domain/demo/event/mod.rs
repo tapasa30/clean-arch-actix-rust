@@ -1,1 +1,2 @@
 pub mod demo_entry_created_event;
+pub mod demo_entry_published_event;

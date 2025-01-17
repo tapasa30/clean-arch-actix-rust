@@ -1,5 +1,5 @@
 use uuid::Uuid;
-use cqrs_derive_macro::Query;
+use cqrs_core_derive_macro::Query;
 
 #[derive(Query)]
 pub struct FindUserByIdQuery {

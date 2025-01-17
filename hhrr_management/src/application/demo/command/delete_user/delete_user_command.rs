@@ -1,4 +1,4 @@
-use cqrs_derive_macro::Command;
+use cqrs_core_derive_macro::Command;
 
 #[derive(Command)]
 pub struct DeleteUserCommand {

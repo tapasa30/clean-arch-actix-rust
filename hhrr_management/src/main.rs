@@ -7,6 +7,7 @@ use crate::core::bus::query_bus::QueryBus;
 use crate::core::container::repository_container::RepositoryContainer;
 use crate::core::container::service_container::ServiceContainer;
 use sqlx::postgres::PgPoolOptions;
+use crate::core::bus::event_bus::DomainEventBus;
 
 mod core;
 mod infrastructure;
@@ -26,7 +27,11 @@ async fn main() -> std::io::Result<()> {
     let repository_container_reference = Arc::new(RepositoryContainer::new(database_pool.clone()));
     let service_container_reference = Arc::new(ServiceContainer::new());
 
-    let command_bus_reference = Arc::new(CommandBus::new(repository_container_reference.clone()));
+    let domain_event_bus_reference = Arc::new(DomainEventBus::new(repository_container_reference.clone()));
+    let command_bus_reference = Arc::new(
+        CommandBus::new(repository_container_reference.clone(), domain_event_bus_reference.clone())
+    );
+
     let query_bus_reference = Arc::new(QueryBus::new(repository_container_reference.clone()));
 
     HttpServer::new(move || {

@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 use std::error::Error;
 use std::sync::Arc;
-use cqrs_domain::query::Query;
-use cqrs_domain::query_handler::QueryHandlerBase;
-use cqrs_domain::query_response::QueryResponse;
+use cqrs_core::query::Query;
+use cqrs_core::query_handler::QueryHandlerBase;
+use cqrs_core::query_response::QueryResponse;
 use crate::application::demo::query::find_user_by_email::find_user_by_email_query_handler::FindUserByEmailQueryHandler;
 use crate::application::demo::query::find_user_by_id::find_user_by_id_query_handler::FindUserByIdQueryHandler;
 use crate::core::container::repository_container::RepositoryContainer;

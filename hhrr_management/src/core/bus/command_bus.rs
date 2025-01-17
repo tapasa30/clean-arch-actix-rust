@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 use std::sync::Arc;
-use cqrs_domain::command::Command;
-use cqrs_domain::command_handler::CommandHandlerBase;
+use cqrs_core::command::Command;
+use cqrs_core::command_handler::CommandHandlerBase;
 use crate::application::demo::command::create_user::create_user_command_handler::CreateUserCommandHandler;
 use crate::application::demo::command::delete_user::delete_user_command_handler::DeleteUserCommandHandler;
+use crate::core::bus::event_bus::DomainEventBus;
 use crate::core::container::repository_container::RepositoryContainer;
 
 pub struct CommandBus {
@@ -11,9 +12,13 @@ pub struct CommandBus {
 }
 
 impl CommandBus {
-    pub fn new(repository_container: Arc<RepositoryContainer>) -> Self {
+    pub fn new(
+        repository_container: Arc<RepositoryContainer>,
+        domain_event_bus: Arc<DomainEventBus>
+    ) -> Self {
         let create_user_command_handler = CreateUserCommandHandler::new(
-            repository_container.demo_repository.clone()
+            repository_container.demo_repository.clone(),
+            domain_event_bus.clone()
         );
 
         let delete_user_command_handler = DeleteUserCommandHandler {};
@@ -41,8 +46,6 @@ impl CommandBus {
         if !command_handler.is_some() {
             panic!("CommandHandler not found");
         }
-        
-        // TODO - retrieve handler returned events and send them to event_bus
 
         command_handler.unwrap().handle_command(command);
     }

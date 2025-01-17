@@ -1,5 +1,5 @@
 use uuid::Uuid;
-use crate::domain::demo::model::demo_model::{DemoModel, DemoModelTrait};
+use crate::domain::demo::model::demo_model::{DemoModel};
 
 pub struct CreateDemoUser {
     pub id: Uuid,
@@ -15,24 +15,24 @@ pub struct ViewDemoUser {
     pub is_published: bool,
 }
 
-impl DemoModelTrait for CreateDemoUser {
+impl CreateDemoUser {
     fn to_domain_model(&self) -> DemoModel {
-        return DemoModel {
-            id: self.id.clone(),
-            title: self.title.clone(),
-            body: self.body.clone(),
-            is_published: self.is_published.clone()
-        }
+        return DemoModel::recreate(
+            self.id.clone(),
+            self.title.clone(),
+            self.body.clone(),
+            self.is_published.clone()
+        );
     }
 }
 
-impl DemoModelTrait for ViewDemoUser {
+impl ViewDemoUser {
     fn to_domain_model(&self) -> DemoModel {
-        return DemoModel {
-            id: self.id.clone(),
-            title: self.title.clone(),
-            body: self.body.clone(),
-            is_published: self.is_published.clone()
-        }
+        return DemoModel::recreate(
+            self.id.clone(),
+            self.title.clone(),
+            self.body.clone(),
+            self.is_published.clone()
+        );
     }
 }

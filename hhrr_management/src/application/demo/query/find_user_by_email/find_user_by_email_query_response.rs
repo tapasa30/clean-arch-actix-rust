@@ -1,4 +1,4 @@
-use cqrs_derive_macro::QueryResponse;
+use cqrs_core_derive_macro::QueryResponse;
 
 #[derive(QueryResponse)]
 pub struct FindUserByEmailQueryResponse {

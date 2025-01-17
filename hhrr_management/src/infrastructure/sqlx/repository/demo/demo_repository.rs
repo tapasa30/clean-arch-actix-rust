@@ -25,38 +25,31 @@ impl DemoRepositoryTrait for PostgreSqlDemoRepository {
 
         let view_demo_user = result.unwrap();
 
-        return Ok(Some(DemoModel {
-            id: view_demo_user.id,
-            title: view_demo_user.title,
-            body: view_demo_user.body,
-            is_published: view_demo_user.is_published,
-        }));
+        return Ok(Some(DemoModel::recreate(
+            view_demo_user.id,
+            view_demo_user.title,
+            view_demo_user.body,
+            view_demo_user.is_published,
+        )));
     }
 
-    fn create_something_by_create_demo_model(&self, create_demo_user: CreateDemoUser) -> bool {
+    fn create_something_by_create_demo_model(&self, create_demo_model: &DemoModel) -> bool {
         let result: Result<PgQueryResult, sqlx::Error> = block_on(
             sqlx::query_as!(
                 ViewDemoUser,
                 "INSERT INTO demo_models (id, title, body, is_published) VALUES ($1, $2, $3, $4)",
-                create_demo_user.id,
-                create_demo_user.title,
-                create_demo_user.body,
-                create_demo_user.is_published
+                create_demo_model.id,
+                create_demo_model.title,
+                create_demo_model.body,
+                create_demo_model.is_published
             ).execute(&self.database_pool)
         );
+        
+        if result.is_err() {
+            println!("Error inserting demo user: {}", create_demo_model.title);
+            println!("Error message: [{}].\n", result.unwrap_err().to_string());
 
-        match result {
-            Err(error) => {
-                println!("Error inserting demo user: {}", create_demo_user.title);
-                println!("Error message: [{}].\n", error.to_string());
-
-                return false;
-            }
-
-            Ok(res) => {
-                println!("Employee has been inserted.");
-                println!("Number of employees inserted: {}", res.rows_affected());
-            }
+            return false;
         }
 
         return true;

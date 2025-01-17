@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::sync::Arc;
-use cqrs_derive_macro::QueryHandler;
-use cqrs_domain::query_handler::QueryHandler;
+use cqrs_core_derive_macro::QueryHandler;
+use cqrs_core::query_handler::QueryHandler;
 use crate::application::demo::query::find_user_by_id::find_user_by_id_query::FindUserByIdQuery;
 use crate::application::demo::query::find_user_by_id::find_user_by_id_query_response::FindUserByIdQueryResponse;
 use crate::domain::demo::repository::demo_repository_trait::DemoRepositoryTrait;

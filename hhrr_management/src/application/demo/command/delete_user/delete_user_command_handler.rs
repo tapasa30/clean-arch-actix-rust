@@ -1,5 +1,5 @@
-use cqrs_derive_macro::CommandHandler;
-use cqrs_domain::command_handler::CommandHandler;
+use cqrs_core_derive_macro::CommandHandler;
+use cqrs_core::command_handler::CommandHandler;
 use crate::application::demo::command::delete_user::delete_user_command::DeleteUserCommand;
 
 #[derive(CommandHandler)]

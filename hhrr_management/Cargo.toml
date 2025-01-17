@@ -4,10 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+cqrs_core = { path = "../cqrs_core" }
+cqrs_core_derive_macro = { path = "../cqrs_core_derive_macro" }
+ddd_core = { path = "../ddd_core" }
+ddd_core_derive_macro = { path = "../ddd_core_derive_macro" }
+events_core = { path = "../events_core" }
+events_core_derive_macro = { path = "../events_core_derive_macro" }
 dotenvy = "0.15.7"
 actix-web = "4"
-cqrs_domain = { path = "../cqrs_domain" }
-cqrs_derive_macro = { path = "../cqrs_derive_macro" }
+
 env_logger = "0.11.5"
 uuid = { version = "1.11.0", features = ["v4"] }
 serde = { version = "1.0.188", features = ["derive"] }
