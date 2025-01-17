@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "event_sourcing_derive"
+name = "events_core_derive_macro"
 version = "0.1.0"
 dependencies = [
  "proc-macro2",
